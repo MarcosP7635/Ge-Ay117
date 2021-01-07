@@ -13,7 +13,8 @@ print(calculateP(1, 1, 2))
 A1 = 41.4
 #Value preset by the problem
 def makePlot(iterations, Ai, sigma):
-    muDistr = np.random.uniform(50,100, iterations)
+    muDistr = np.random.uniform(-3*sigma,3*sigma, iterations)
+    #The actual peak for the probability is between 75 and 90
     AiArray = [0]*iterations
     for i in range(len(muDistr)):
         mu = muDistr[i]
