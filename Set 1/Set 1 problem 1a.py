@@ -12,17 +12,33 @@ def calculateP (Ai, mu, sigma):
 #Returns the probability of obtaining a specific value of Ai given mu and sigma
     return p
 '''
-Main takes the number of x values (iterations), Ai, and the standard deviation
+Takes the number of x values (iterations), Ai, and the standard deviation
 to call helper functions to calculate the array of x and y values
 then calls a final function to produce plots
 '''
-def plotSingularGaussian(iterations, Ai, sigma):
-    muDistr = np.arange(Ai-3*sigma,Ai+3*sigma, 6*sigma/iterations)
+def main(iterations, Ai, sigma, gaussians):
     AiArray = [0]*iterations
-    #Calculate the unnormalized distribution
-    for i in range(len(muDistr)):
-        mu = muDistr[i]
-        AiArray[i] = calculateP(Ai, mu, sigma)
+    if (gaussians<2):
+        muDistr = np.arange(Ai-3*sigma,Ai+3*sigma, 6*sigma/iterations)
+        #Calculate the unnormalized distribution
+        for i in range(len(muDistr)):
+            mu = muDistr[i]
+            AiArray[i] = calculateP(Ai, mu, sigma)
+            #print(AiArray)
+            #Now to normalize the array
+    else:
+        min = np.amin(Ai)-3*sigma
+        max = np.amax(Ai)+3*sigma
+        steps = (max-min)/iterations
+        muDistr = np.arange(min,max,steps)
+        AiArray = [0]*(len(muDistr))
+        #Calculate the unnormalized distribution
+        for i in range(len(muDistr)):
+            intermediateP = 1
+            mu = muDistr[i]
+            for j in range(len(Ai)):
+                intermediateP = intermediateP*calculateP(Ai[j], mu, sigma)
+            AiArray[i] = intermediateP
         #print(AiArray)
         #Now to normalize the array
     AiArray = normalize(AiArray,muDistr)
@@ -33,7 +49,6 @@ we get 1
 '''
 def normalize(AiArray, muDistr):
     normConstant = np.trapz(AiArray, muDistr)
-    print(normConstant)
     for i in range(len(muDistr)):
        AiArray[i] = AiArray[i]/normConstant
     return AiArray
@@ -45,10 +60,18 @@ def makePlot(muDistr, AiArray, Ai):
     plt.xlabel('mu')
     plt.title(title)
     plt.show()
-#This function calculates the normalized probability
+#Value preset by the problem
 A1 = 41.4
 A2 = 46.9
-#Value preset by the problem
+def calculateSigma(sigmaArray):
+    newSigma = sigmaArray[0]
+    for i in range(len(sigmaArray)-1):
+        newSigma = (newSigma*sigmaArray[i+1])/math.sqrt(newSigma**2+sigmaArray[i+1]**2)
+    return newSigma
 #call everything make the plot
-plotSingularGaussian(10**5,A1,2)
-plotSingularGaussian(10**5,A2,3)
+#the fourth input (gaussians) should equal the length of the array named Ai
+#if you only wish to plot a single gaussian just put gaussian as 1 and enter an
+#float for Ai
+#main(10**5,A1,2,1)
+#main(10**5,A2,3,1)
+main(10**6,[A1,A2],calculateSigma([2,3]),2)
