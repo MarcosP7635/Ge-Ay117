@@ -7,35 +7,30 @@ from mpmath import*
 #mpmath also has a built-in very accurate value for e
 def calculateP (Ai, mu, sigma):
     p = e**((-.5*(((Ai-mu)/sigma)**2)))
-    p = p*((1/(sigma*((2*pi)**.5))))
-    #p = (p+760)/-300
-#This is the probability of obtaining a specific value of Ai given mu and sigma
+    #p = p*((1/(sigma*((2*pi)**.5))))
+    #Using the above line will normalize the data
+#Returns the probability of obtaining a specific value of Ai given mu and sigma
     return p
 def makePlot(iterations, Ai, sigma):
-    muDistr = np.random.uniform(Ai+3*sigma,Ai-3*sigma, iterations)
+    muDistr = np.arange(Ai-3*sigma,Ai+3*sigma, 6*sigma/iterations)
     AiArray = [0]*iterations
     #Calculate the unnormalized distribution
     for i in range(len(muDistr)):
         mu = muDistr[i]
         AiArray[i] = calculateP(Ai, mu, sigma)
         #print(AiArray)
-    min = np.amin(AiArray)
-    max = np.amax(AiArray)
-    #Now to normalize the array
+        #Now to normalize the array
+    normConstant = np.trapz(AiArray, muDistr)
+    print(normConstant)
     for i in range(len(muDistr)):
-        mu = muDistr[i]
-        AiArray[i] = normalizeP(max,min, Ai, mu, sigma)
+       AiArray[i] = AiArray[i]/normConstant
     plt.scatter(muDistr,AiArray)
-    yaxis = "Normalized Probability of obtaining Ai = " + str(Ai)
-    plt.ylabel(yaxis)
+    title = "Normalized Probability of obtaining Ai = " + str(Ai)
+    plt.ylabel("Normalized Probability")
     plt.xlabel('mu')
+    plt.title(title)
     plt.show()
 #This function calculates the normalized probability
-def normalizeP (max, min, Ai, mu, sigma):
-    p = e**((-.5*(((Ai-mu)/sigma)**2)))
-    p = p*((1/(sigma*((2*pi)**.5))))
-    p = (p-min)/(max-min)
-    return p
 A1 = 41.4
 A2 = 46.9
 #Value preset by the problem
