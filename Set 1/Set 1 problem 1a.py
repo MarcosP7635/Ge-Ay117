@@ -31,6 +31,7 @@ def main(iterations, Ai, sigma, gaussians):
         sigma = calculateSigma(sigma)
         print(mu, sigma)
         main(iterations, mu, sigma, 1)
+        return
         #The code below is technically wrong but I don't want to delete it
         '''min = np.amin(Ai)-3*sigma
         max = np.amax(Ai)+3*sigma
@@ -58,7 +59,7 @@ def normalize(AiArray, muDistr):
 #makes the plot given x array, y array, and Ai
 def makePlot(muDistr, AiArray, Ai):
     plt.scatter(muDistr,AiArray)
-    title = "Normalized Probability of obtaining Ai or B"
+    title = "Normalized Probability of obtaining Ai including data from JLUE Paper "
     plt.ylabel("Normalized Probability")
     plt.xlabel('mu')
     plt.title(title)
@@ -98,5 +99,8 @@ prob3 = calculateP(44.1,mu,sigma3)/ 4.01335922875334
 print(prob1*prob2*prob3)'''
 mu = [38.9, 34.2, 52.1, 38.7, 44.1, 40.4, 48.7, 48.0, 38.1, 35.7 ]
 sigma = [6.8, 7.4, 6.3, 5.0, 6.6, 5.4, 5., 5.9, 5., 6.9]
-print(len(mu)-len(sigma))
-main(10**5,mu,sigma,len(mu))
+FiveA = 1
+for i in range(len(mu)):
+    FiveA = FiveA*calculateP(mu[i], 43.16210724799415, 1.6054330245612716)/4.01335922875334
+print(FiveA)
+main(10**5,[A1,A2,A3],[2,3,6.1],3)
