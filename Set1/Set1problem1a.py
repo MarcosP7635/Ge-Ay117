@@ -65,9 +65,6 @@ def makePlot(muDistr, AiArray, Ai):
     plt.title(title)
     plt.show()
 #Value preset by the problem
-A1 = 41.4
-A2 = 46.9
-A3 = 44.1
 def calculateSigma(sigmaArray):
     newSigma = sigmaArray[0]
     for i in range(len(sigmaArray)-1):
@@ -87,7 +84,11 @@ def calculateMu(AiArray, sigmaArray):
 #float for Ai
 #main(10**5,A1,2,1)
 #main(10**5,A2,3,1)
-'''mu = (9*A1+4*A2)/13
+'''
+A1 = 41.4
+A2 = 46.9
+A3 = 44.1
+mu = (9*A1+4*A2)/13
 sigma2 = calculateSigma([2,3])
 sigma3 = calculateSigma([2,3,6.1])
 print(sigma3)
@@ -96,7 +97,7 @@ print("mu = "+ str(mu))
 prob1 = calculateP(41.4,mu,sigma3)/ 4.01335922875334
 prob2 = calculateP(46.9, mu,sigma3)/ 4.01335922875334
 prob3 = calculateP(44.1,mu,sigma3)/ 4.01335922875334
-print(prob1*prob2*prob3)'''
+print(prob1*prob2*prob3)
 mu = [38.9, 34.2, 52.1, 38.7, 44.1, 40.4, 48.7, 48.0, 38.1, 35.7 ]
 sigma = [6.8, 7.4, 6.3, 5.0, 6.6, 5.4, 5., 5.9, 5., 6.9]
 FiveA = 1
@@ -104,3 +105,4 @@ for i in range(len(mu)):
     FiveA = FiveA*calculateP(mu[i], 43.16210724799415, 1.6054330245612716)/4.01335922875334
 print(FiveA)
 main(10**5,[A1,A2,A3],[2,3,6.1],3)
+'''

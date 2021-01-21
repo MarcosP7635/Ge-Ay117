@@ -3,13 +3,16 @@ import math
 import matplotlib as plt
 import matplotlib.pyplot as plt
 from mpmath import*
+import os
+filetorun = os.getcwd() + "\Set1\Set1problem1a.py"
+exec(open(filetorun).read())
 def calculateX (alpha, beta, smalln, bign):
     x = [0]*smalln
     feederX = [0]*bign
     probs = [0]*bign
     counts = np.empty(0)
     '''
-    will randomly choose integers and make them the first row (0 to 100)
+    will randomly choose integers (0 to 100)
     will compute their probabilities
     '''
     for i in range(bign):
@@ -22,4 +25,3 @@ def calculateX (alpha, beta, smalln, bign):
         index = int(np.random.uniform(0, len(counts)-1))
         x[i] = counts[index]
     return x
-print(calculateX(50, 2, 16, 10**4))
