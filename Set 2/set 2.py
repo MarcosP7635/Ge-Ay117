@@ -30,15 +30,16 @@ kadenData = np.array([2.1501584946622896, 2.059141036875201, 3.202064945118297, 
 #now I need to add the data 1 at a time.
 #sigma = np.array([1])
 sigma = np.empty(0)
-fig, axs = plt.subplots(0)
-for i in range(1,len(kadenData)+1):
-    data = kadenData[:i+1]
-    mu = np.average(data)
-    sigma = np.append(sigma, i**-.5)
-    num=i
-    print(num)
-    #main(iterations, Ai, sigma, gaussians, w)
-    main(10**2, data, sigma, len(data), num)
-plt.tight_layout()
-fig.savefig(os.getcwd()+'\Set 2\plot' + str(i) + '.png')
+#fig, axs = plt.subplots(0)
+#for i in range(1,len(kadenData)+1):
+i = 17
+data = kadenData[:i+1]
+mu = np.average(data)
+sigma = np.append(sigma, i**-.5)
+num=i
+print(num)
+#main(iterations, Ai, sigma, gaussians, w)
+main(10**3, data, sigma, len(data), num)
+#plt.tight_layout()
+#fig.savefig(os.getcwd()+'\Set 2\plot' + str(i) + '.png')
 #for ax in axs.flat:

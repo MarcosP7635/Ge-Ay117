@@ -4,6 +4,9 @@ import matplotlib as plt
 import matplotlib.pyplot as plt
 from mpmath import*
 import pandas as pd
+import os
+filetorun = os.getcwd() + "\Set 2\confidence interval set2.py"
+exec(open(filetorun).read())
 #mpmath is essential for performing these calculations on small probabilities
 #mpmath also has a built-in very accurate value for e
 def calculateP (Ai, mu, sigma):
@@ -51,6 +54,8 @@ def main(iterations, Ai, sigma, gaussians, num):
         #Now to normalize the array
     AiArray = normalize(AiArray,muDistr)
     makePlot(muDistr, AiArray, Ai, num)
+    print(ConfidenceInterval(muDistr, AiArray, .68))
+    print(ConfidenceInterval(muDistr, AiArray, .95))
 '''
 Normalizes the y values such that when integrated with respect to the x values
 we get 1
@@ -66,13 +71,23 @@ def normalize(AiArray, muDistr):
 #makes the plot given x array, y array, and Ai
 def makePlot(muDistr, AiArray, Ai, num):
     #plt.scatter(muDistr,AiArray)
-    ax1 = fig.add_subplot(4, 4, num)
-    ax1.plot(muDistr,AiArray)
-    #plt.subplots_adjust(left=None, bottom=None, right=None, top=None,
-    #wpsace = 1.0, hspace = 1.0)
-    ax1.set_title('Using ' + str(num) + ' Data Points', size = 8)
-    ax1.set_ylabel("P(alpha|X,I)", size = 8)
-    ax1.set_xlabel('mu', size = 8)
+    if(num==17):
+        plt.scatter(muDistr,AiArray)
+        title = "P(alpha|x,I) "
+        plt.ylabel("Normalized Probability")
+        plt.xlabel('x')
+        plt.title(title)
+        plt.show()
+
+'''
+ax1 = fig.add_subplot(4, 4, num)
+ax1.plot(muDistr,AiArray)
+#plt.subplots_adjust(left=None, bottom=None, right=None, top=None,
+#wpsace = 1.0, hspace = 1.0)
+ax1.set_title('Using ' + str(num) + ' Data Points', size = 8)
+ax1.set_ylabel("P(alpha|X,I)", size = 8)
+ax1.set_xlabel('mu', size = 8)
+'''
 #Value preset by the problem
 def calculateSigma(sigmaArray):
     newSigma = sigmaArray[0]
