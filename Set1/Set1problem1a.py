@@ -3,6 +3,7 @@ import math
 import matplotlib as plt
 import matplotlib.pyplot as plt
 from mpmath import*
+import pandas as pd
 #mpmath is essential for performing these calculations on small probabilities
 #mpmath also has a built-in very accurate value for e
 def calculateP (Ai, mu, sigma):
@@ -16,9 +17,12 @@ Takes the number of x values (iterations), Ai, and the standard deviation
 to call helper functions to calculate the array of x and y values
 then calls a final function to produce plots
 '''
-def main(iterations, Ai, sigma, gaussians):
+def main(iterations, Ai, sigma, gaussians, num):
     if (gaussians<2):
-        muDistr = np.arange(Ai-3*sigma,Ai+3*sigma, 6*sigma/iterations)
+        if isinstance(sigma,(list,pd.core.series.Series,np.ndarray)):
+            sigma = sigma[0]
+        muDistr = np.arange(-5,5, 10/iterations)
+        #muDistr = np.arange(Ai-3*sigma,Ai+3*sigma, 6*sigma/iterations)
         AiArray = [0]*len(muDistr)
         #Calculate the unnormalized distribution
         for i in range(len(muDistr)):
@@ -28,9 +32,10 @@ def main(iterations, Ai, sigma, gaussians):
             #Now to normalize the array
     else:
         mu = calculateMu(Ai, sigma)
-        sigma = calculateSigma(sigma)
+        sigma = sigma[len(sigma)-1]
+        #sigma = calculateSigma(sigma)
         print(mu, sigma)
-        main(iterations, mu, sigma, 1)
+        main(iterations, mu, sigma, 1, num)
         return
         #The code below is technically wrong but I don't want to delete it
         '''min = np.amin(Ai)-3*sigma
@@ -45,30 +50,34 @@ def main(iterations, Ai, sigma, gaussians):
                 AiArray[i] = AiArray[i]*calculateP(Ai[j], mu, sigma)'''
         #Now to normalize the array
     AiArray = normalize(AiArray,muDistr)
-    makePlot(muDistr, AiArray, Ai)
+    makePlot(muDistr, AiArray, Ai, num)
 '''
 Normalizes the y values such that when integrated with respect to the x values
 we get 1
 '''
 def normalize(AiArray, muDistr):
+    muDistr = muDistr.flatten()
+    print(len(AiArray),muDistr.shape)
     normConstant = np.trapz(AiArray, muDistr)
     for i in range(len(muDistr)):
        AiArray[i] = AiArray[i]/normConstant
     print("normConstant = " + str(normConstant))
     return AiArray
 #makes the plot given x array, y array, and Ai
-def makePlot(muDistr, AiArray, Ai):
-    plt.scatter(muDistr,AiArray)
-    title = "Normalized Probability of obtaining Ai including data from JLUE Paper "
-    plt.ylabel("Normalized Probability")
-    plt.xlabel('mu')
-    plt.title(title)
-    plt.show()
+def makePlot(muDistr, AiArray, Ai, num):
+    #plt.scatter(muDistr,AiArray)
+    ax1 = fig.add_subplot(4, 4, num)
+    ax1.plot(muDistr,AiArray)
+    #plt.subplots_adjust(left=None, bottom=None, right=None, top=None,
+    #wpsace = 1.0, hspace = 1.0)
+    ax1.set_title('Using ' + str(num) + ' Data Points', size = 8)
+    ax1.set_ylabel("P(alpha|X,I)", size = 8)
+    ax1.set_xlabel('mu', size = 8)
 #Value preset by the problem
 def calculateSigma(sigmaArray):
     newSigma = sigmaArray[0]
     for i in range(len(sigmaArray)-1):
-        newSigma = (newSigma*sigmaArray[i+1])/math.sqrt(newSigma**2+sigmaArray[i+1]**2)
+        newSigma = (newSigma*sigmaArray[i+1])/sqrt(newSigma**2+sigmaArray[i+1]**2)
     return newSigma
 def calculateMu(AiArray, sigmaArray):
     mu = AiArray[0]
@@ -106,3 +115,4 @@ for i in range(len(mu)):
 print(FiveA)
 main(10**5,[A1,A2,A3],[2,3,6.1],3)
 '''
+print("hello")
